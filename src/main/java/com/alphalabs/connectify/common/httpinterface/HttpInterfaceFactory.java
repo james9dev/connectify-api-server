@@ -1,4 +1,4 @@
-package com.alphalabs.connectify.config;
+package com.alphalabs.connectify.common.httpinterface;
 
 import org.springframework.web.client.RestClient;
 

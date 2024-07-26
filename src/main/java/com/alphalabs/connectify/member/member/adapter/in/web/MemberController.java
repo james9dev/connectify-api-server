@@ -5,7 +5,7 @@ import com.alphalabs.connectify.member.member.application.port.in.RegisterKakaoU
 import com.alphalabs.connectify.member.member.application.port.in.command.RegisterKakaoCommand;
 import com.alphalabs.connectify.member.member.domain.MemberDomain;
 import com.alphalabs.connectify.common.ResultDto;
-import com.alphalabs.connectify.common.WebAdapter;
+import com.alphalabs.connectify.common.architecture.WebAdapter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

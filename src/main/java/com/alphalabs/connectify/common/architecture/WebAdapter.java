@@ -1,4 +1,4 @@
-package com.alphalabs.connectify.common;
+package com.alphalabs.connectify.common.architecture;
 
 import org.springframework.core.annotation.AliasFor;
 import org.springframework.stereotype.Component;

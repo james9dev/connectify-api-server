@@ -1,4 +1,4 @@
-package com.alphalabs.connectify.common;
+package com.alphalabs.connectify.common.architecture;
 
 import org.springframework.core.annotation.AliasFor;
 import org.springframework.stereotype.Component;
@@ -9,7 +9,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Component
-public @interface PersistenceAdapter {
+public @interface UseCase {
 
   /**
    * The value may indicate a suggestion for a logical component name,
