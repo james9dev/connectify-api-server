@@ -7,7 +7,7 @@ import org.springframework.web.service.annotation.PostExchange;
 
 import java.util.Optional;
 
-public interface KakaoAuthClient {
+public interface HttpKakaoAuthClient {
 
 	@PostExchange("/v2/user/me")
 	Optional<KakaoDomain> auth(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken);

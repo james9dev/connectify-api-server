@@ -1,5 +1,6 @@
 package com.alphalabs.connectify.member.member.adapter.in.web;
 
+import com.alphalabs.connectify.member.member.domain.AuthDomain;
 import com.alphalabs.connectify.member.member.domain.MemberDomain;
 import org.springframework.stereotype.Component;
 
@@ -7,11 +8,11 @@ import org.springframework.stereotype.Component;
 @Component
 class MemberMapper {
 
-    static MemberSignUpResponseDto mapToRegisterResponse(Long id) {
+    static MemberAuthResponseDto mapToMemberAuthResponse(AuthDomain authDomain) {
 
-		MemberSignUpResponseDto registerResponseDto = new MemberSignUpResponseDto(id);
+		MemberAuthResponseDto memberAuthResponseDto = new MemberAuthResponseDto(authDomain.getAuthTokenDto());
 
-        return registerResponseDto;
+        return memberAuthResponseDto;
     }
 
 	static MemberResponseDto mapToMemberResponse(MemberDomain domain) {

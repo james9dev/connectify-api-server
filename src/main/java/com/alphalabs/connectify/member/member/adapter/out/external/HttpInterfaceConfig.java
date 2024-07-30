@@ -15,17 +15,15 @@ import org.springframework.web.client.RestClient;
 @PropertySource("classpath:application.properties")
 public class HttpInterfaceConfig {
 
-	private final String kakaoAuthUrl;
 	private final HttpInterfaceFactory httpInterfaceFactory;
 
-	public HttpInterfaceConfig(@Value("${external-api.kakaoauth.url}") String kakaoAuthUrl) {
+	public HttpInterfaceConfig() {
 		this.httpInterfaceFactory = new SimpleHttpInterfaceFactory();
-		this.kakaoAuthUrl = kakaoAuthUrl;
 	}
 
 	@Bean
-	public KakaoAuthClient kakaoAuthClient() {
-		return httpInterfaceFactory.create(KakaoAuthClient.class, createRestClient(kakaoAuthUrl));
+	public HttpKakaoAuthClient kakaoAuthClient(@Value("${external-api.kakaoauth.url}") String clientUrl) {
+		return httpInterfaceFactory.create(HttpKakaoAuthClient.class, createRestClient(clientUrl));
 	}
 
 	private RestClient createRestClient(String baseUrl) {

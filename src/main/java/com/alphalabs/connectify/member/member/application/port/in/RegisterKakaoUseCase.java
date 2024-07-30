@@ -1,8 +1,9 @@
 package com.alphalabs.connectify.member.member.application.port.in;
 
 import com.alphalabs.connectify.member.member.application.port.in.command.RegisterKakaoCommand;
+import com.alphalabs.connectify.member.member.domain.AuthDomain;
 
 public interface RegisterKakaoUseCase {
 
-	Long authKakao(RegisterKakaoCommand command);
+	AuthDomain authKakao(RegisterKakaoCommand command);
 }

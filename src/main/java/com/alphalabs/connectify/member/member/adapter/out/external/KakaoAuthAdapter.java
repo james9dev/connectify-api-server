@@ -10,8 +10,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @PersistenceAdapter
 public class KakaoAuthAdapter implements GetKakaoUserPort {
-	private final KakaoAuthClient kakaoAuthClient;
 
+	private final HttpKakaoAuthClient kakaoAuthClient;
 
 	@Override
 	public Optional<KakaoDomain> getUser(String accessToken) {
