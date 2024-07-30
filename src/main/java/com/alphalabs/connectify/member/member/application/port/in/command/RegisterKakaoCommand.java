@@ -1,9 +1,7 @@
 package com.alphalabs.connectify.member.member.application.port.in.command;
 
 import com.alphalabs.connectify.common.SelfValidating;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Pattern;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
 
@@ -12,10 +10,10 @@ import lombok.Value;
 public class RegisterKakaoCommand extends SelfValidating<RegisterKakaoCommand> {
 
 	@NotEmpty(message = "Access token은 필수 입니다.")
-	private final String accessToken;
+	private final String kakaoAccessToken;
 
 	public RegisterKakaoCommand(String accessToken) {
-		this.accessToken = accessToken;
+		this.kakaoAccessToken = accessToken;
 
 		this.validateSelf();
 	}
