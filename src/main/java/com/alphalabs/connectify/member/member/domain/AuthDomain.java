@@ -2,6 +2,7 @@ package com.alphalabs.connectify.member.member.domain;
 
 import com.alphalabs.connectify.common.AuthTokenDto;
 import com.alphalabs.connectify.common.security.JwtUtil;
+import com.alphalabs.connectify.exception.UnMatchTokenType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Value;
@@ -21,8 +22,8 @@ public class AuthDomain {
 		long accessExpirationTime = System.currentTimeMillis() + ACCESS_EXP;
 		long refreshExpirationTime = System.currentTimeMillis() + REFRESH_EXP;
 
-		String accessToken = JwtUtil.createJwt(memberNo, accessExpirationTime);
-		String refreshToken = JwtUtil.createJwt(memberNo, refreshExpirationTime);
+		String accessToken = JwtUtil.createAccessToken(memberNo, accessExpirationTime);
+		String refreshToken = JwtUtil.createRefreshToken(memberNo, refreshExpirationTime);
 
 
 		AuthTokenDto authTokenDto = new AuthTokenDto(accessToken, refreshToken);
@@ -30,9 +31,13 @@ public class AuthDomain {
 		return new AuthDomain(authTokenDto);
 	}
 
-	public static AuthDomain refreshJwt(String refreshToken) {
+	public static AuthDomain refreshJwt(String refreshToken) throws UnMatchTokenType {
 
-		Long memberNo = JwtUtil.getLoginId(refreshToken);
+		if (JwtUtil.getType(refreshToken) != JwtUtil.TOKEN_TYPE.REFRESH_TOKEN) {
+			throw new UnMatchTokenType("Invalid token");
+		}
+
+		Long memberNo = JwtUtil.getId(refreshToken);
 
 		return withMemberNo(memberNo);
 	}

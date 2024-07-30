@@ -37,7 +37,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 			return;
 		}
 
-		Long memberNo = JwtUtil.getLoginId(token);
+		Long memberNo = JwtUtil.getId(token);
 
 		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
 				memberNo,

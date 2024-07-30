@@ -41,7 +41,11 @@ class MemberPersistenceAdapter implements InsertMemberPort, GetMemberPort {
 
 		Optional<MemberJpaEntity> jpaEntity = repository.findById(id);
 
-		return mapper.mapToDomainEntity(jpaEntity);
+		if (jpaEntity.isPresent()) {
+			return mapper.mapToDomainEntity(jpaEntity.get());
+		}
+
+		return Optional.empty();
 	}
 
 	@Override
@@ -50,7 +54,7 @@ class MemberPersistenceAdapter implements InsertMemberPort, GetMemberPort {
 		Optional<MemberJpaEntity> jpaEntity = repository.findByProviderToken(providerToken);
 
 		if (jpaEntity.isPresent()) {
-			return mapper.mapToDomainEntity(jpaEntity);
+			return mapper.mapToDomainEntity(jpaEntity.get());
 		}
 
 		return Optional.empty();

@@ -10,12 +10,12 @@ import java.util.Optional;
 @Component
 class MemberPersistenceMapper {
 
-	Optional<MemberDomain> mapToDomainEntity(Optional<MemberJpaEntity> sampleJpaEntity) {
+	Optional<MemberDomain> mapToDomainEntity(MemberJpaEntity sampleJpaEntity) {
 
 		return Optional.of(MemberDomain.withNo(
-				sampleJpaEntity.get().getNo(),
-				sampleJpaEntity.get().getEmail(),
-				sampleJpaEntity.get().getName()));
+				sampleJpaEntity.getNo(),
+				sampleJpaEntity.getEmail(),
+				sampleJpaEntity.getName()));
 
 	}
 

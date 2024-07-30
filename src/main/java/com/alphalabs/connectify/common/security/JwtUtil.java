@@ -16,7 +16,9 @@ public class JwtUtil {
 
 	private static SecretKey secretKey;
 
-	private static String PAYLOAD_MEMBER_NO = "memberNo";
+	public enum TOKEN_TYPE {
+		ACCESS_TOKEN, REFRESH_TOKEN
+	}
 
 	//private final long defaultExpiration = 2592000000L; //86400 * 30 * 1000;
 	//long expirationTime = expiredMs == null ? (System.currentTimeMillis() + defaultExpiration) : expiredMs;
@@ -25,8 +27,15 @@ public class JwtUtil {
 		this.secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
 	}
 
-	public static Long getLoginId(String token) {
-		return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get(PAYLOAD_MEMBER_NO, Long.class);
+	public static Long getId(String token) {
+		return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("id", Long.class);
+	}
+
+	public static TOKEN_TYPE getType(String token) {
+
+		String type = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("type", String.class);
+
+		return TOKEN_TYPE.valueOf(type);
 	}
 
 	/*
@@ -39,15 +48,21 @@ public class JwtUtil {
 		return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
 	}
 
-	public static String createJwt(Long memberNo, Long expiredMs) {
+	public static String createAccessToken(Long memberNo, Long expiredMs) {
 
-		return createJwt(memberNo, null, expiredMs);
+		return createJwt(memberNo, null, expiredMs, TOKEN_TYPE.ACCESS_TOKEN.toString());
 	}
 
-	public static String createJwt(Long loginId, String role, Long expiredMs) {
+	public static String createRefreshToken(Long memberNo, Long expiredMs) {
+
+		return createJwt(memberNo, null, expiredMs, TOKEN_TYPE.REFRESH_TOKEN.toString());
+	}
+
+	public static String createJwt(Long id, String role, Long expiredMs, String tokenType) {
 
 		return Jwts.builder()
-				.claim(PAYLOAD_MEMBER_NO, loginId)
+				.claim("id", id)
+				.claim("type", tokenType)
 				.claim("role", role)
 				.issuedAt(new Date(System.currentTimeMillis()))
 				.expiration(new Date(System.currentTimeMillis() + expiredMs))

@@ -1,5 +1,6 @@
 package com.alphalabs.connectify.member.member.application.service;
 
+import com.alphalabs.connectify.exception.*;
 import com.alphalabs.connectify.member.member.application.port.in.AuthUseCase;
 import com.alphalabs.connectify.member.member.application.port.in.GetMemberUseCase;
 import com.alphalabs.connectify.member.member.application.port.in.RegisterKakaoUseCase;
@@ -26,25 +27,25 @@ public class MemberRegisterService implements RegisterKakaoUseCase, AuthUseCase,
 	private final GetMemberPort getMemberPort;
 	private final GetKakaoUserPort getKakaoUserPort;
 
-
-
 	@Override
-	public MemberDomain getMember(Long id) {
-		return getMemberPort.getMember(id).orElseThrow(() -> new IllegalArgumentException("Member not found"));
+	public MemberDomain getMember(Long id) throws NoSuchElementFoundException {
+		return getMemberPort.getMember(id).orElseThrow(() ->
+				new NoSuchElementFoundException("Member not found")
+		);
 	}
 
 	@Override
 	public AuthDomain authKakao(RegisterKakaoCommand command) {
 
-		Optional<MemberDomain> member = getMemberPort.getMember(command.getAccessToken());
+		Optional<MemberDomain> member = getMemberPort.getMember(command.getKakaoAccessToken());
 
 		Long memberNo;
 
 		if (member.isPresent()) {
 			memberNo = member.get().getNo();
 		} else {
-			KakaoDomain kakaoDomain = getKakaoUserPort.getUser(command.getAccessToken()).orElseThrow();
-			kakaoDomain.setAccess_token(command.getAccessToken());
+			KakaoDomain kakaoDomain = getKakaoUserPort.getUser(command.getKakaoAccessToken()).orElseThrow();
+			kakaoDomain.setAccess_token(command.getKakaoAccessToken());
 
 			memberNo = insertMemberPort.insertKakaoUser(kakaoDomain);
 		}
@@ -53,7 +54,7 @@ public class MemberRegisterService implements RegisterKakaoUseCase, AuthUseCase,
 	}
 
 	@Override
-	public AuthDomain refreshJwt(RefreshAuthCommand command) {
+	public AuthDomain refreshJwt(RefreshAuthCommand command) throws NoSuchElementFoundException {
 
 		String refreshToken = command.getRefreshToken();
 
