@@ -16,7 +16,7 @@ class MemberMapper {
 
 	static MemberResponseDto mapToMemberResponse(MemberDomain domain) {
 
-		MemberResponseDto memberResponseDto = new MemberResponseDto(domain.getId(), domain.getEmail(), domain.getName());
+		MemberResponseDto memberResponseDto = new MemberResponseDto(domain.getNo(), domain.getEmail(), domain.getName());
 
 		return memberResponseDto;
 	}

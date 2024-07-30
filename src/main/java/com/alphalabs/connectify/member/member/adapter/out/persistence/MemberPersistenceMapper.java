@@ -12,8 +12,8 @@ class MemberPersistenceMapper {
 
 	Optional<MemberDomain> mapToDomainEntity(Optional<MemberJpaEntity> sampleJpaEntity) {
 
-		return Optional.of(MemberDomain.withId(
-				sampleJpaEntity.get().getId(),
+		return Optional.of(MemberDomain.withNo(
+				sampleJpaEntity.get().getNo(),
 				sampleJpaEntity.get().getEmail(),
 				sampleJpaEntity.get().getName()));
 

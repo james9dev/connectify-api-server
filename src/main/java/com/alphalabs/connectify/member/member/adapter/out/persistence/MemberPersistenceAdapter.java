@@ -20,25 +20,20 @@ class MemberPersistenceAdapter implements InsertMemberPort, GetMemberPort {
 	public Long insertMember(MemberDomain domain) {
 
 		MemberJpaEntity jpaEntity = new MemberJpaEntity(
-				null,
 				domain.getEmail(),
-				domain.getName(),
-				null,
-				null);
+				domain.getName());
 
-		return repository.save(jpaEntity).getId();
+		return repository.save(jpaEntity).getNo();
 	}
 
 	@Override
 	public Long insertKakaoUser(KakaoDomain domain) {
 		MemberJpaEntity jpaEntity = new MemberJpaEntity(
-				null,
 				domain.getKakao_account().getEmail(),
-				null,
 				domain.getAccess_token(),
 				ProviderType.KAKAO);
 
-		return repository.save(jpaEntity).getId();
+		return repository.save(jpaEntity).getNo();
 	}
 
 	@Override

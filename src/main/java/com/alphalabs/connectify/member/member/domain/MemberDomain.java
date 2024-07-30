@@ -17,7 +17,7 @@ public class MemberDomain {
 	 * The unique ID of the member.
 	 */
 	@Getter
-	private Long id;
+	private Long no;
 
 	@Getter
 	private final String email;
@@ -30,7 +30,7 @@ public class MemberDomain {
 	 * Creates an {@link MemberDomain} entity without an ID. Use to create a new entity that is not yet
 	 * persisted.
 	 */
-	public static MemberDomain withoutId(String email,
+	public static MemberDomain withoutNo(String email,
 										 String name) {
 
 		return new MemberDomain(null, email, name);
@@ -39,11 +39,11 @@ public class MemberDomain {
 	/**
 	 * Creates an {@link MemberDomain} entity with an ID. Use to reconstitute a persisted entity.
 	 */
-	public static MemberDomain withId(Long id,
+	public static MemberDomain withNo(Long no,
 									  String email,
 									  String name) {
 
-		return new MemberDomain(id, email, name);
+		return new MemberDomain(no, email, name);
 	}
 
 }
