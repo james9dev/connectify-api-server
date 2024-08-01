@@ -2,7 +2,8 @@ package com.alphalabs.connectify.app.member.application.port.in;
 
 import com.alphalabs.connectify.app.member.domain.MemberDomain;
 
-public interface GetMemberUseCase {
+public interface GetProfileUseCase {
 
-	MemberDomain getMember(Long id);
+	MemberDomain getProfile(Long no);
+	MemberDomain getProfileMe(String accessToken);
 }

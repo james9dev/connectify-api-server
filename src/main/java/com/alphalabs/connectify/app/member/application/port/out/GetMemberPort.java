@@ -5,8 +5,6 @@ import com.alphalabs.connectify.app.member.domain.MemberDomain;
 import java.util.Optional;
 
 public interface GetMemberPort {
-
-	Optional<MemberDomain> getMember(Long id);
-
+	Optional<MemberDomain> getMember(Long no);
 	Optional<MemberDomain> getMember(String providerToken);
 }

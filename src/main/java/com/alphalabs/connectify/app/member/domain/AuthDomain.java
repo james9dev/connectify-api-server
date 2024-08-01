@@ -15,7 +15,7 @@ public class AuthDomain {
 	private static final Long REFRESH_EXP = 2592000000L;
 
 	@Getter
-	AuthTokenDto authTokenDto;
+	AuthTokenDto authToken;
 
 	public static AuthDomain withMemberNo(Long memberNo) {
 

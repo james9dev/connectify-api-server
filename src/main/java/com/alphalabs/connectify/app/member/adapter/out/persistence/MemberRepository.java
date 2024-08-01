@@ -11,4 +11,5 @@ interface MemberRepository extends JpaRepository<MemberJpaEntity, Long> {
 
 	@Query("select m from MemberJpaEntity m where m.providerToken = :providerToken")
 	Optional<MemberJpaEntity> findByProviderToken(@Param("providerToken") String providerToken);
+
 }

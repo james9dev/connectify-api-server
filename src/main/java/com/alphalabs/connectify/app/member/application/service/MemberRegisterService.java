@@ -1,7 +1,6 @@
 package com.alphalabs.connectify.app.member.application.service;
 
 import com.alphalabs.connectify.app.member.application.port.in.AuthUseCase;
-import com.alphalabs.connectify.app.member.application.port.in.GetMemberUseCase;
 import com.alphalabs.connectify.app.member.application.port.in.RegisterKakaoUseCase;
 import com.alphalabs.connectify.app.member.application.port.in.command.RefreshAuthCommand;
 import com.alphalabs.connectify.app.member.application.port.in.command.RegisterKakaoCommand;
@@ -21,18 +20,13 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @UseCase
 @Transactional
-public class MemberRegisterService implements RegisterKakaoUseCase, AuthUseCase, GetMemberUseCase {
+public class MemberRegisterService implements RegisterKakaoUseCase, AuthUseCase {
 
 	private final InsertMemberPort insertMemberPort;
 	private final GetMemberPort getMemberPort;
 	private final GetKakaoUserPort getKakaoUserPort;
 
-	@Override
-	public MemberDomain getMember(Long id) throws NoSuchElementFoundException {
-		return getMemberPort.getMember(id).orElseThrow(() ->
-				new NoSuchElementFoundException("Member not found")
-		);
-	}
+
 
 	@Override
 	public AuthDomain authKakao(RegisterKakaoCommand command) {

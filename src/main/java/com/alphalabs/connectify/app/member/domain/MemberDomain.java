@@ -10,19 +10,15 @@ import lombok.Value;
 
 @Value
 @AllArgsConstructor
+@Getter
 public class MemberDomain {
 
-	/**
-	 * The unique ID of the member.
-	 */
-	@Getter
 	private Long no;
-
-	@Getter
 	private final String email;
-
-	@Getter
 	private final String name;
+	private final String phoneNumber;
+
+	private final ProfileDomain profile;
 
 
 	/**
@@ -30,9 +26,10 @@ public class MemberDomain {
 	 * persisted.
 	 */
 	public static MemberDomain withoutNo(String email,
-										 String name) {
+										 String name,
+										 ProfileDomain profile) {
 
-		return new MemberDomain(null, email, name);
+		return new MemberDomain(null, email, name, null, profile);
 	}
 
 	/**
@@ -40,9 +37,10 @@ public class MemberDomain {
 	 */
 	public static MemberDomain withNo(Long no,
 									  String email,
-									  String name) {
+									  String name,
+									  ProfileDomain profile) {
 
-		return new MemberDomain(no, email, name);
+		return new MemberDomain(no, email, name, null, profile);
 	}
 
 }

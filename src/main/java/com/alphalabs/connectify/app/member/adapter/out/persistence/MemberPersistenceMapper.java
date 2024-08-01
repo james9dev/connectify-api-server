@@ -2,21 +2,39 @@ package com.alphalabs.connectify.app.member.adapter.out.persistence;
 
 
 import com.alphalabs.connectify.app.member.domain.MemberDomain;
+import com.alphalabs.connectify.app.member.domain.ProfileDomain;
 import org.springframework.stereotype.Component;
-
-import java.util.Optional;
 
 
 @Component
 class MemberPersistenceMapper {
 
-	Optional<MemberDomain> mapToDomainEntity(MemberJpaEntity sampleJpaEntity) {
+	MemberDomain mapToMemberDomain(MemberJpaEntity memberJpaEntity) {
 
-		return Optional.of(MemberDomain.withNo(
-				sampleJpaEntity.getNo(),
-				sampleJpaEntity.getEmail(),
-				sampleJpaEntity.getName()));
+		ProfileJpaEntity profileJpaEntity = memberJpaEntity.getProfile();
 
+		ProfileDomain profileDomain = this.mapToProfileDomain(profileJpaEntity);
+
+		return MemberDomain.withNo(
+				memberJpaEntity.getNo(),
+				memberJpaEntity.getEmail(),
+				memberJpaEntity.getName(),
+				profileDomain);
+
+	}
+
+	ProfileDomain mapToProfileDomain(ProfileJpaEntity profileJpaEntity) {
+
+		return new ProfileDomain(
+				profileJpaEntity.getId(),
+				profileJpaEntity.getNickName(),
+				profileJpaEntity.getGender(),
+				profileJpaEntity.getHeight(),
+				profileJpaEntity.getBirthyear(),
+				profileJpaEntity.getBirthday(),
+				profileJpaEntity.getLatitude(),
+				profileJpaEntity.getLongitude()
+		);
 	}
 
 }

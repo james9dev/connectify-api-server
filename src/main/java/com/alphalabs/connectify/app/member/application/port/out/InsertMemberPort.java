@@ -4,7 +4,5 @@ import com.alphalabs.connectify.app.member.domain.KakaoDomain;
 import com.alphalabs.connectify.app.member.domain.MemberDomain;
 
 public interface InsertMemberPort {
-
-	Long insertMember(MemberDomain domain);
-	Long insertKakaoUser(KakaoDomain domain);
+	Long insertKakaoUser(KakaoDomain kakaoDomain);
 }

@@ -26,8 +26,8 @@ public class SecurityConfig {
 				.addFilterBefore(new JwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
 				.authorizeHttpRequests((auth) -> auth
 						//.requestMatchers("/member/*", "/jwt-login/", "/jwt-login/login", "/jwt-login/join").anonymous()
-						.requestMatchers("/member/auth/*").permitAll()
-						.requestMatchers("/member/*").authenticated()
+						.requestMatchers("/member/sign/*").permitAll()
+						.requestMatchers("/member/*", "profile/*").authenticated()
 						//.requestMatchers("/admin/**").hasRole("ADMIN")
 						.anyRequest().authenticated()
 				)
