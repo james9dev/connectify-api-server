@@ -5,6 +5,7 @@ import com.alphalabs.connectify.app.member.application.port.in.UpdateProfileUseC
 import com.alphalabs.connectify.app.member.application.port.in.command.UpdateProfileCommand;
 import com.alphalabs.connectify.app.member.application.port.out.GetMemberPort;
 import com.alphalabs.connectify.app.member.application.port.out.UpdateProfilePort;
+import com.alphalabs.connectify.app.member.domain.MemberDistanceDomain;
 import com.alphalabs.connectify.app.member.domain.MemberDomain;
 import com.alphalabs.connectify.app.member.domain.ProfileDomain;
 import com.alphalabs.connectify.common.architecture.UseCase;
@@ -12,6 +13,8 @@ import com.alphalabs.connectify.common.security.JwtUtil;
 import com.alphalabs.connectify.exception.NoSuchElementFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @UseCase
@@ -52,5 +55,14 @@ public class ProfileService implements GetProfileUseCase, UpdateProfileUseCase {
 		);
 
 		return updateProfilePort.updateProfile(no, profileDomain);
+	}
+
+	@Override
+	public List<MemberDistanceDomain> getNearbyMembers(String accessToken, Long radius) {
+		Long no = JwtUtil.getId(accessToken);
+
+		List<MemberDistanceDomain> list = getMemberPort.findNearbyUsers(no, radius);
+
+		return list;
 	}
 }

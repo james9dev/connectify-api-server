@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-class ProfileUpdateRequest {
+class RequestProfileUpdateDto {
 
 	private final String nickName;
 	private final GenderType gender;

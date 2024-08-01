@@ -5,8 +5,9 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-class MemberSignUpRequestDto {
-	private final String email;
-	private final String password;
-	private final String name;
+class RequestSignUpKakaoDto {
+	private final String idToken;
+	private final String accessToken;
+	private final String tokenType;
+
 }

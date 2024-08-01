@@ -1,6 +1,7 @@
 package com.alphalabs.connectify.app.member.adapter.out.persistence;
 
 import com.alphalabs.connectify.app.member.application.port.out.UpdateProfilePort;
+import com.alphalabs.connectify.app.member.domain.MemberDistanceDomain;
 import com.alphalabs.connectify.app.member.domain.ProfileDomain;
 import com.alphalabs.connectify.app.member.domain.enums.GenderType;
 import com.alphalabs.connectify.app.member.domain.enums.ProviderType;
@@ -11,6 +12,8 @@ import com.alphalabs.connectify.app.member.domain.MemberDomain;
 import com.alphalabs.connectify.common.architecture.PersistenceAdapter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -119,6 +122,36 @@ class MemberPersistenceAdapter implements InsertMemberPort, GetMemberPort, Updat
 			ProfileJpaEntity savedProfile = profileRepository.save(profileEntity);
 
 			return mapper.mapToProfileDomain(savedProfile);
+		}
+
+		return null;
+	}
+
+	@Override
+	public List<MemberDistanceDomain> findNearbyUsers(Long memberNo, Long radius) {
+
+		Optional<MemberJpaEntity> targetMember = memberRepository.findById(memberNo);
+		if (targetMember.isPresent()) {
+			Double latitude = targetMember.get().getProfile().getLatitude();
+			Double longitude = targetMember.get().getProfile().getLongitude();
+
+			 memberRepository.findNearbyMembers(latitude, longitude, radius);
+
+			List<MemberDistance> results = memberRepository.findNearbyMembers(latitude, longitude, radius);
+			List<MemberDistanceDomain> nearbyMembers = new ArrayList<>();
+
+			for (MemberDistance memberDistance : results) {
+				MemberJpaEntity memberJpaEntity = memberDistance.getMember();
+				double distance = memberDistance.getDistance(); // 필요시 거리 정보도 사용할 수 있습니다.
+
+				MemberDomain memberDomain = mapper.mapToMemberDomain(memberJpaEntity);
+
+				MemberDistanceDomain memberDistanceDomain = new MemberDistanceDomain(memberDomain, distance);
+
+				nearbyMembers.add(memberDistanceDomain);
+			}
+
+			return nearbyMembers;
 		}
 
 		return null;

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @WebAdapter
 @RestController
 @RequiredArgsConstructor
-public class ProfileController {
+public class MemberProfileController {
 
 	private final GetProfileUseCase getUseCase;
 	private final UpdateProfileUseCase updateProfileUseCase;
@@ -45,7 +45,7 @@ public class ProfileController {
 
 	@PutMapping(path = "/profile/update")
 	ResponseEntity<ResultDto<ProfileDomain>> updateProfile(@RequestHeader("Authorization") String authorization,
-														   @RequestBody ProfileUpdateRequest profileRequest) {
+														   @RequestBody RequestProfileUpdateDto profileRequest) {
 
 		String accessToken = authorization.split(" ")[1];
 

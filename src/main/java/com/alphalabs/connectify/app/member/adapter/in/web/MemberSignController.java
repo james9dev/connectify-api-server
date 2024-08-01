@@ -21,7 +21,7 @@ public class MemberSignController {
 	private final AuthUseCase authUseCase;
 
 	@PostMapping(path = "/member/sign/kakao")
-	ResponseEntity<ResultDto<AuthDomain>> authKakao(@RequestBody MemberSignUpKakaoRequestDto request) {
+	ResponseEntity<ResultDto<AuthDomain>> authKakao(@RequestBody RequestSignUpKakaoDto request) {
 
 		String kakaoAccessToken = request.getAccessToken();
 
