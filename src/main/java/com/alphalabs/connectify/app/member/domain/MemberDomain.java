@@ -13,7 +13,7 @@ import lombok.Value;
 @Getter
 public class MemberDomain {
 
-	private Long no;
+	private Long id;
 	private final String email;
 	private final String name;
 	private final String phoneNumber;
@@ -25,7 +25,7 @@ public class MemberDomain {
 	 * Creates an {@link MemberDomain} entity without an ID. Use to create a new entity that is not yet
 	 * persisted.
 	 */
-	public static MemberDomain withoutNo(String email,
+	public static MemberDomain withoutId(String email,
 										 String name,
 										 ProfileDomain profile) {
 
@@ -35,12 +35,12 @@ public class MemberDomain {
 	/**
 	 * Creates an {@link MemberDomain} entity with an ID. Use to reconstitute a persisted entity.
 	 */
-	public static MemberDomain withNo(Long no,
+	public static MemberDomain withId(Long id,
 									  String email,
 									  String name,
 									  ProfileDomain profile) {
 
-		return new MemberDomain(no, email, name, null, profile);
+		return new MemberDomain(id, email, name, null, profile);
 	}
 
 }

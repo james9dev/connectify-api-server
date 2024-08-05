@@ -17,13 +17,13 @@ public class AuthDomain {
 	@Getter
 	AuthTokenDto authToken;
 
-	public static AuthDomain withMemberNo(Long memberNo) {
+	public static AuthDomain withMemberId(Long memberId) {
 
 		long accessExpirationTime = System.currentTimeMillis() + ACCESS_EXP;
 		long refreshExpirationTime = System.currentTimeMillis() + REFRESH_EXP;
 
-		String accessToken = JwtUtil.createAccessToken(memberNo, accessExpirationTime);
-		String refreshToken = JwtUtil.createRefreshToken(memberNo, refreshExpirationTime);
+		String accessToken = JwtUtil.createAccessToken(memberId, accessExpirationTime);
+		String refreshToken = JwtUtil.createRefreshToken(memberId, refreshExpirationTime);
 
 
 		AuthTokenDto authTokenDto = new AuthTokenDto(accessToken, refreshToken);
@@ -37,8 +37,8 @@ public class AuthDomain {
 			throw new UnMatchTokenType("Invalid token");
 		}
 
-		Long memberNo = JwtUtil.getId(refreshToken);
+		Long memberId = JwtUtil.getId(refreshToken);
 
-		return withMemberNo(memberNo);
+		return withMemberId(memberId);
 	}
 }

@@ -21,10 +21,10 @@ public class MemberProfileController {
 	private final UpdateProfileUseCase updateProfileUseCase;
 
 
-	@GetMapping(path = "/profile/{no}")
-	ResponseEntity<ResultDto<MemberDomain>> getProfile(@PathVariable Long no) {
+	@GetMapping(path = "/profile/{memberId}")
+	ResponseEntity<ResultDto<MemberDomain>> getProfile(@PathVariable Long memberId) {
 
-		MemberDomain member = getUseCase.getProfile(no);
+		MemberDomain member = getUseCase.getProfile(memberId);
 
 		ResultDto<MemberDomain> result = new ResultDto<>(200, "테스트 메시지", member);
 

@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface GetProfileUseCase {
 
-	MemberDomain getProfile(Long no);
+	MemberDomain getProfile(Long memberId);
 	MemberDomain getProfileMe(String accessToken);
 
 	List<MemberDistanceDomain> getNearbyMembers(String accessToken, Long radius);

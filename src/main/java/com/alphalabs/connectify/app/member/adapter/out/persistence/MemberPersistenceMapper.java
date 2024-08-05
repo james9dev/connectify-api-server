@@ -15,8 +15,8 @@ class MemberPersistenceMapper {
 
 		ProfileDomain profileDomain = this.mapToProfileDomain(profileJpaEntity);
 
-		return MemberDomain.withNo(
-				memberJpaEntity.getNo(),
+		return MemberDomain.withId(
+				memberJpaEntity.getId(),
 				memberJpaEntity.getEmail(),
 				memberJpaEntity.getName(),
 				profileDomain);

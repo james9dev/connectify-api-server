@@ -71,11 +71,10 @@ class MemberPersistenceAdapter implements InsertMemberPort, GetMemberPort, Updat
 		return jpaEntity.map(mapper::mapToMemberDomain);
 	}
 
-
 	@Override
-	public ProfileDomain updateProfile(Long memberNo, ProfileDomain domain) {
+	public ProfileDomain updateProfile(Long memberId, ProfileDomain domain) {
 
-		Optional<MemberJpaEntity> jpaEntity = memberRepository.findById(memberNo);
+		Optional<MemberJpaEntity> jpaEntity = memberRepository.findById(memberId);
 
 		if (jpaEntity.isPresent()) {
 			MemberJpaEntity memberJpaEntity = jpaEntity.get();
@@ -128,9 +127,9 @@ class MemberPersistenceAdapter implements InsertMemberPort, GetMemberPort, Updat
 	}
 
 	@Override
-	public List<MemberDistanceDomain> findNearbyUsers(Long memberNo, Long radius) {
+	public List<MemberDistanceDomain> findNearbyUsers(Long memberId, Long radius) {
 
-		Optional<MemberJpaEntity> targetMember = memberRepository.findById(memberNo);
+		Optional<MemberJpaEntity> targetMember = memberRepository.findById(memberId);
 		if (targetMember.isPresent()) {
 			Double latitude = targetMember.get().getProfile().getLatitude();
 			Double longitude = targetMember.get().getProfile().getLongitude();

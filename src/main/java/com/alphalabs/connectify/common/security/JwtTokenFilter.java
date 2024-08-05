@@ -37,10 +37,10 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 			return;
 		}
 
-		Long memberNo = JwtUtil.getId(token);
+		Long memberId = JwtUtil.getId(token);
 
 		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-				memberNo,
+				memberId,
 				null,
 				null);
 		authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface GetMemberPort {
-	Optional<MemberDomain> getMember(Long no);
+	Optional<MemberDomain> getMember(Long memberId);
 	Optional<MemberDomain> getMember(String providerToken);
 
-	List<MemberDistanceDomain> findNearbyUsers(Long memberNo, Long radius);
+	List<MemberDistanceDomain> findNearbyUsers(Long memberId, Long radius);
 }

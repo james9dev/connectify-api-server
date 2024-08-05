@@ -25,17 +25,17 @@ public class ProfileService implements GetProfileUseCase, UpdateProfileUseCase {
 	private final UpdateProfilePort updateProfilePort;
 
 	@Override
-	public MemberDomain getProfile(Long no) throws NoSuchElementFoundException {
-		return getMemberPort.getMember(no).orElseThrow(() ->
+	public MemberDomain getProfile(Long memberId) throws NoSuchElementFoundException {
+		return getMemberPort.getMember(memberId).orElseThrow(() ->
 				new NoSuchElementFoundException("Member not found")
 		);
 	}
 
 	@Override
 	public MemberDomain getProfileMe(String accessToken) throws NoSuchElementFoundException {
-		Long no = JwtUtil.getId(accessToken);
+		Long memberId = JwtUtil.getId(accessToken);
 
-		return this.getProfile(no);
+		return this.getProfile(memberId);
 	}
 
 	@Override
@@ -59,9 +59,9 @@ public class ProfileService implements GetProfileUseCase, UpdateProfileUseCase {
 
 	@Override
 	public List<MemberDistanceDomain> getNearbyMembers(String accessToken, Long radius) {
-		Long no = JwtUtil.getId(accessToken);
+		Long memberId = JwtUtil.getId(accessToken);
 
-		List<MemberDistanceDomain> list = getMemberPort.findNearbyUsers(no, radius);
+		List<MemberDistanceDomain> list = getMemberPort.findNearbyUsers(memberId, radius);
 
 		return list;
 	}

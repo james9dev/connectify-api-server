@@ -48,14 +48,14 @@ public class JwtUtil {
 		return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
 	}
 
-	public static String createAccessToken(Long memberNo, Long expiredMs) {
+	public static String createAccessToken(Long memberId, Long expiredMs) {
 
-		return createJwt(memberNo, null, expiredMs, TOKEN_TYPE.ACCESS_TOKEN.toString());
+		return createJwt(memberId, null, expiredMs, TOKEN_TYPE.ACCESS_TOKEN.toString());
 	}
 
-	public static String createRefreshToken(Long memberNo, Long expiredMs) {
+	public static String createRefreshToken(Long memberId, Long expiredMs) {
 
-		return createJwt(memberNo, null, expiredMs, TOKEN_TYPE.REFRESH_TOKEN.toString());
+		return createJwt(memberId, null, expiredMs, TOKEN_TYPE.REFRESH_TOKEN.toString());
 	}
 
 	public static String createJwt(Long id, String role, Long expiredMs, String tokenType) {

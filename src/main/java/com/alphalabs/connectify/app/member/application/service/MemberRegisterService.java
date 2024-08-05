@@ -33,18 +33,18 @@ public class MemberRegisterService implements RegisterKakaoUseCase, AuthUseCase 
 
 		Optional<MemberDomain> member = getMemberPort.getMember(command.getKakaoAccessToken());
 
-		Long memberNo;
+		Long memberId;
 
 		if (member.isPresent()) {
-			memberNo = member.get().getNo();
+			memberId = member.get().getId();
 		} else {
 			KakaoDomain kakaoDomain = getKakaoUserPort.getUser(command.getKakaoAccessToken()).orElseThrow();
 			kakaoDomain.setAccess_token(command.getKakaoAccessToken());
 
-			memberNo = insertMemberPort.insertKakaoUser(kakaoDomain);
+			memberId = insertMemberPort.insertKakaoUser(kakaoDomain);
 		}
 
-		return AuthDomain.withMemberNo(memberNo);
+		return AuthDomain.withMemberId(memberId);
 	}
 
 	@Override
