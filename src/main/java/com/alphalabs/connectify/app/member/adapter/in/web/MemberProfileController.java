@@ -2,15 +2,24 @@ package com.alphalabs.connectify.app.member.adapter.in.web;
 
 import com.alphalabs.connectify.app.member.application.port.in.GetProfileUseCase;
 import com.alphalabs.connectify.app.member.application.port.in.UpdateProfileUseCase;
+import com.alphalabs.connectify.app.member.application.port.in.UploadPictureUseCase;
 import com.alphalabs.connectify.app.member.application.port.in.command.UpdateProfileCommand;
+import com.alphalabs.connectify.app.member.application.port.in.command.UploadPictureCommand;
 import com.alphalabs.connectify.app.member.domain.MemberDomain;
 import com.alphalabs.connectify.app.member.domain.ProfileDomain;
+import com.alphalabs.connectify.common.ListDto;
 import com.alphalabs.connectify.common.ResultDto;
 import com.alphalabs.connectify.common.architecture.WebAdapter;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 @WebAdapter
 @RestController
@@ -19,6 +28,7 @@ public class MemberProfileController {
 
 	private final GetProfileUseCase getUseCase;
 	private final UpdateProfileUseCase updateProfileUseCase;
+	private final UploadPictureUseCase uploadPictureUseCase;
 
 
 	@GetMapping(path = "/profile/{memberId}")
@@ -45,7 +55,7 @@ public class MemberProfileController {
 
 	@PutMapping(path = "/profile/update")
 	ResponseEntity<ResultDto<ProfileDomain>> updateProfile(@RequestHeader("Authorization") String authorization,
-														   @RequestBody RequestProfileUpdateDto profileRequest) {
+														   @RequestBody RequestUpdateProfileDto profileRequest) {
 
 		String accessToken = authorization.split(" ")[1];
 
@@ -67,5 +77,55 @@ public class MemberProfileController {
 
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
+
+	@PostMapping(path = "/profile/upload/photo")
+	ResponseEntity<ResultDto<ProfileDomain.ProfilePicture>> uploadPhoto(@RequestHeader("Authorization") String authorization,
+														   @RequestPart("data") Integer order,
+														   @RequestPart("files") MultipartFile multipartFile) throws IOException {
+
+		String accessToken = authorization.split(" ")[1];
+		//Integer order = pictureRequest.getOrder();
+
+		UploadPictureCommand uploadPictureCommand = new UploadPictureCommand(accessToken, multipartFile, order);
+
+
+		ProfileDomain.ProfilePicture profilePicture = uploadPictureUseCase.uploadPicture(uploadPictureCommand);
+
+		ResultDto<ProfileDomain.ProfilePicture> result = new ResultDto<>(200, "테스트 메시지", profilePicture);
+
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+
+	@PostMapping(path = "/profile/upload/photo/noncheck")
+	ResponseEntity<ResultDto<ProfileDomain.ProfilePicture>> uploadPhotoNonCheck(@RequestHeader("Authorization") String authorization,
+																				@RequestPart("data") Integer order,
+																				@RequestPart("files") MultipartFile multipartFile) throws IOException {
+
+		String accessToken = authorization.split(" ")[1];
+		//Integer order = pictureRequest.getOrder();
+
+		UploadPictureCommand uploadPictureCommand = new UploadPictureCommand(accessToken, multipartFile, order);
+
+		ProfileDomain.ProfilePicture profilePicture = uploadPictureUseCase.uploadPictureNoncheck(uploadPictureCommand);
+
+		ResultDto<ProfileDomain.ProfilePicture> result = new ResultDto<>(200, "테스트 메시지", profilePicture);
+
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+
+
+
+	@GetMapping(path = "/rekognition")
+	ResponseEntity<ResultDto<Boolean>> runRekognition() {
+
+		//this.rekognition();
+
+
+		ResultDto<Boolean> result = new ResultDto<>(200, "테스트 메시지", true);
+
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+
+
 
 }

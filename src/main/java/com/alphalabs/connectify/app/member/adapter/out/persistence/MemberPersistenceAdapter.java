@@ -1,5 +1,6 @@
 package com.alphalabs.connectify.app.member.adapter.out.persistence;
 
+import com.alphalabs.connectify.app.member.application.port.out.InsertPicturePort;
 import com.alphalabs.connectify.app.member.application.port.out.UpdateProfilePort;
 import com.alphalabs.connectify.app.member.domain.MemberDistanceDomain;
 import com.alphalabs.connectify.app.member.domain.ProfileDomain;
@@ -10,6 +11,7 @@ import com.alphalabs.connectify.app.member.application.port.out.InsertMemberPort
 import com.alphalabs.connectify.app.member.domain.KakaoDomain;
 import com.alphalabs.connectify.app.member.domain.MemberDomain;
 import com.alphalabs.connectify.common.architecture.PersistenceAdapter;
+import com.alphalabs.connectify.exception.NoSuchElementFoundException;
 import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
@@ -18,12 +20,13 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @PersistenceAdapter
-class MemberPersistenceAdapter implements InsertMemberPort, GetMemberPort, UpdateProfilePort {
+class MemberPersistenceAdapter implements InsertMemberPort, GetMemberPort, UpdateProfilePort, InsertPicturePort {
 
 	private final MemberPersistenceMapper mapper;
 
 	private final MemberRepository memberRepository;
 	private final ProfileRepository profileRepository;
+	private final PictureRepository pictureRepository;
 
 
 	@Override
@@ -31,33 +34,35 @@ class MemberPersistenceAdapter implements InsertMemberPort, GetMemberPort, Updat
 
 		KakaoDomain.KakaoAccount kakaoAccount = kakaoDomain.getKakao_account();
 
-		MemberJpaEntity jpaEntity = new MemberJpaEntity(
+		MemberJpaEntity member = new MemberJpaEntity(
 				kakaoAccount.getEmail(),
 				kakaoAccount.getIs_email_verified(),
 				kakaoDomain.getAccess_token(),
 				ProviderType.KAKAO);
 
+		memberRepository.save(member);
 
-		ProfileJpaEntity profileEntity = new ProfileJpaEntity();
+		ProfileJpaEntity profile = new ProfileJpaEntity();
+		profile.setMember(member);
 
 		String gender = kakaoAccount.getGender();
 
 		if (gender != null) {
 			GenderType genderType = GenderType.MALE.toString().equals(gender) ? GenderType.MALE : GenderType.FEMALE;
-			profileEntity.setGender(genderType);
+			profile.setGender(genderType);
 		}
 
-		profileRepository.save(profileEntity);
+		member.setProfile(profile);
 
-		jpaEntity.setProfile(profileEntity);
+		profileRepository.save(profile);
 
-		return memberRepository.save(jpaEntity).getNo();
+		return member.getId();
 	}
 
 	@Override
-	public Optional<MemberDomain> getMember(Long no) {
+	public Optional<MemberDomain> getMember(Long memberId) {
 
-		Optional<MemberJpaEntity> jpaEntity = memberRepository.findById(no);
+		Optional<MemberJpaEntity> jpaEntity = memberRepository.findById(memberId);
 
 		return jpaEntity.map(mapper::mapToMemberDomain);
 
@@ -154,5 +159,27 @@ class MemberPersistenceAdapter implements InsertMemberPort, GetMemberPort, Updat
 		}
 
 		return null;
+	}
+
+	@Override
+	public ProfileDomain.ProfilePicture insertPicture(Long memberId, String filePath, Integer order) {
+
+		ProfileJpaEntity profileEntity = profileRepository.findByMemberId(memberId);
+
+		if (profileEntity == null) {
+			throw new NoSuchElementFoundException("Not found profile");
+		}
+
+		PictureJpaEntity pictureEntity = new PictureJpaEntity();
+
+		pictureEntity.setPictureOrder(order);
+		pictureEntity.setImageUrl(filePath);
+
+		pictureEntity.setProfile(profileEntity);
+
+		pictureRepository.save(pictureEntity);
+
+
+		return new ProfileDomain.ProfilePicture(pictureEntity.getId(), pictureEntity.getImageUrl(), pictureEntity.getPictureOrder(), pictureEntity.getCreatedAt());
 	}
 }

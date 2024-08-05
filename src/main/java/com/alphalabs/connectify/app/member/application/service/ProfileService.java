@@ -2,27 +2,38 @@ package com.alphalabs.connectify.app.member.application.service;
 
 import com.alphalabs.connectify.app.member.application.port.in.GetProfileUseCase;
 import com.alphalabs.connectify.app.member.application.port.in.UpdateProfileUseCase;
+import com.alphalabs.connectify.app.member.application.port.in.UploadPictureUseCase;
 import com.alphalabs.connectify.app.member.application.port.in.command.UpdateProfileCommand;
-import com.alphalabs.connectify.app.member.application.port.out.GetMemberPort;
-import com.alphalabs.connectify.app.member.application.port.out.UpdateProfilePort;
+import com.alphalabs.connectify.app.member.application.port.in.command.UploadPictureCommand;
+import com.alphalabs.connectify.app.member.application.port.out.*;
 import com.alphalabs.connectify.app.member.domain.MemberDistanceDomain;
 import com.alphalabs.connectify.app.member.domain.MemberDomain;
 import com.alphalabs.connectify.app.member.domain.ProfileDomain;
 import com.alphalabs.connectify.common.architecture.UseCase;
 import com.alphalabs.connectify.common.security.JwtUtil;
+import com.alphalabs.connectify.exception.ForbiddenContent;
 import com.alphalabs.connectify.exception.NoSuchElementFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 @UseCase
 @Transactional
-public class ProfileService implements GetProfileUseCase, UpdateProfileUseCase {
+public class ProfileService implements GetProfileUseCase, UpdateProfileUseCase, UploadPictureUseCase {
 
 	private final GetMemberPort getMemberPort;
 	private final UpdateProfilePort updateProfilePort;
+	private final InsertPicturePort insertPicturePort;
+
+	private final FileStoragePort fileStoragePort;
+	private final DetectModerationPort detectModerationPort;
 
 	@Override
 	public MemberDomain getProfile(Long memberId) throws NoSuchElementFoundException {
@@ -44,7 +55,6 @@ public class ProfileService implements GetProfileUseCase, UpdateProfileUseCase {
 		Long no = JwtUtil.getId(command.getAccessToken());
 
 		ProfileDomain profileDomain = new ProfileDomain(
-				null,
 				command.getNickName(),
 				command.getGender(),
 				command.getHeight(),
@@ -64,5 +74,50 @@ public class ProfileService implements GetProfileUseCase, UpdateProfileUseCase {
 		List<MemberDistanceDomain> list = getMemberPort.findNearbyUsers(memberId, radius);
 
 		return list;
+	}
+
+
+	public boolean uploadPhoto(String accessToken, MultipartFile file) {
+
+
+
+		return true;
+	}
+
+	@Override
+	public ProfileDomain.ProfilePicture uploadPicture(UploadPictureCommand uploadPictureCommand) throws IOException {
+
+		Long memberId = JwtUtil.getId(uploadPictureCommand.getAccessToken());
+
+		String pictureUrl = fileStoragePort.savePicture(uploadPictureCommand.getMultipartFile());
+
+		List<String> moderationLabels = detectModerationPort.detectModerationLabelsByFileName(pictureUrl);
+
+		if (moderationLabels.isEmpty()) {
+
+			Integer order = uploadPictureCommand.getOrder();
+
+			ProfileDomain.ProfilePicture profilePicture = insertPicturePort.insertPicture(memberId, pictureUrl, order);
+
+			return profilePicture;
+		} else {
+			fileStoragePort.deletePicture(pictureUrl);
+
+			throw new ForbiddenContent("You are not allowed to upload a picture");
+		}
+	}
+
+	@Override
+	public ProfileDomain.ProfilePicture uploadPictureNoncheck(UploadPictureCommand uploadPictureCommand) throws IOException {
+
+		Long memberId = JwtUtil.getId(uploadPictureCommand.getAccessToken());
+
+		String pictureUrl = fileStoragePort.savePicture(uploadPictureCommand.getMultipartFile());
+
+		Integer order = uploadPictureCommand.getOrder();
+
+		ProfileDomain.ProfilePicture profilePicture = insertPicturePort.insertPicture(memberId, pictureUrl, order);
+
+		return profilePicture;
 	}
 }

@@ -2,11 +2,12 @@ package com.alphalabs.connectify.app.member.adapter.out.persistence;
 
 import com.alphalabs.connectify.app.member.domain.enums.GenderType;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Null;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.boot.context.properties.bind.DefaultValue;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "profile")
@@ -30,6 +31,16 @@ class ProfileJpaEntity {
 
 	private Double latitude;
 	private Double longitude;
+
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "member_id")
+	private MemberJpaEntity member;
+
+//	@OneToOne(mappedBy = "profile")
+//	private MemberJpaEntity member;
+
+	@OneToMany(mappedBy = "profile", fetch = FetchType.LAZY)
+	private List<PictureJpaEntity> pictures = new ArrayList<>();
 
 }
 

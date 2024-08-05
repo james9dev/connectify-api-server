@@ -5,6 +5,9 @@ import com.alphalabs.connectify.app.member.domain.MemberDomain;
 import com.alphalabs.connectify.app.member.domain.ProfileDomain;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Component
 class MemberPersistenceMapper {
@@ -33,8 +36,17 @@ class MemberPersistenceMapper {
 				profileJpaEntity.getBirthyear(),
 				profileJpaEntity.getBirthday(),
 				profileJpaEntity.getLatitude(),
-				profileJpaEntity.getLongitude()
+				profileJpaEntity.getLongitude(),
+				profileJpaEntity.getPictures().stream().map(MemberPersistenceMapper::mapToProfilePicture).toList()
 		);
+	}
+
+	static ProfileDomain.ProfilePicture mapToProfilePicture(PictureJpaEntity pictureJpaEntity) {
+		return new ProfileDomain.ProfilePicture(
+				pictureJpaEntity.getId(),
+				pictureJpaEntity.getImageUrl(),
+				pictureJpaEntity.getPictureOrder(),
+				pictureJpaEntity.getCreatedAt());
 	}
 
 }

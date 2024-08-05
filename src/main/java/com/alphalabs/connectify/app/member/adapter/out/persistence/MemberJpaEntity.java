@@ -16,7 +16,7 @@ class MemberJpaEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long no;
+	private Long id;
 
 	private String email;
 
@@ -35,9 +35,12 @@ class MemberJpaEntity {
 	@Enumerated(EnumType.STRING)
 	private ProviderType providerType;
 
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "profile_id")
+	@OneToOne(mappedBy = "member")
 	private ProfileJpaEntity profile;
+
+//	@OneToOne(fetch = FetchType.LAZY)
+//	@JoinColumn(name = "profile_id")
+//	private ProfileJpaEntity profile;
 
 
 	public MemberJpaEntity(String email, boolean verifiedEmail, String providerToken, ProviderType providerType) {
