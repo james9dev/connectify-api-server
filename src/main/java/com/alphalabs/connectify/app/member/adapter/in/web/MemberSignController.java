@@ -5,6 +5,7 @@ import com.alphalabs.connectify.app.member.application.port.in.command.RefreshAu
 import com.alphalabs.connectify.app.member.application.port.in.command.RegisterKakaoCommand;
 import com.alphalabs.connectify.app.member.application.port.in.RegisterKakaoUseCase;
 import com.alphalabs.connectify.app.member.domain.AuthDomain;
+import com.alphalabs.connectify.common.AuthTokenDto;
 import com.alphalabs.connectify.common.ResultDto;
 import com.alphalabs.connectify.common.architecture.WebAdapter;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ public class MemberSignController {
 	private final AuthUseCase authUseCase;
 
 	@PostMapping(path = "/member/sign/kakao")
-	ResponseEntity<ResultDto<AuthDomain>> authKakao(@RequestBody RequestSignUpKakaoDto request) {
+	ResponseEntity<ResultDto<AuthTokenDto>> authKakao(@RequestBody RequestSignUpKakaoDto request) {
 
 		String kakaoAccessToken = request.getAccessToken();
 
@@ -29,13 +30,13 @@ public class MemberSignController {
 
 		AuthDomain authDomain = registerKakaoAuthUseCase.authKakao(command);
 
-		ResultDto<AuthDomain> result = new ResultDto<>(201, "테스트 메시지", authDomain);
+		ResultDto<AuthTokenDto> result = new ResultDto<>(201, "테스트 메시지", authDomain.getAuthToken());
 
 		return new ResponseEntity<>(result, HttpStatus.CREATED);
 	}
 
 	@PostMapping(path = "/member/refresh-token")
-	ResponseEntity<ResultDto<AuthDomain>> refreshToken(@RequestHeader("Authorization") String authorization) {
+	ResponseEntity<ResultDto<AuthTokenDto>> refreshToken(@RequestHeader("Authorization") String authorization) {
 
 		String refreshToken = authorization.split(" ")[1];
 
@@ -43,7 +44,7 @@ public class MemberSignController {
 
 		AuthDomain authDomain = authUseCase.refreshJwt(command);
 
-		ResultDto<AuthDomain> result = new ResultDto<>(201, "테스트 메시지", authDomain);
+		ResultDto<AuthTokenDto> result = new ResultDto<>(201, "테스트 메시지", authDomain.getAuthToken());
 
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
