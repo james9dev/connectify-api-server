@@ -39,8 +39,9 @@ class MemberPersistenceAdapter implements InsertMemberPort, GetMemberPort, Updat
 				kakaoAccount.getIs_email_verified(),
 				kakaoAccount.getPhone_number(),
 				!kakaoAccount.getPhone_number().isEmpty(),
-				kakaoDomain.getAccess_token(),
-				ProviderType.KAKAO);
+				ProviderType.KAKAO,
+				kakaoDomain.getId(),
+				kakaoDomain.getAccess_token());
 
 		memberRepository.save(member);
 
@@ -72,9 +73,9 @@ class MemberPersistenceAdapter implements InsertMemberPort, GetMemberPort, Updat
 	}
 
 	@Override
-	public Optional<MemberDomain> getMember(String providerToken) {
+	public Optional<MemberDomain> getMemberByProvider(Long providerId) {
 
-		Optional<MemberJpaEntity> jpaEntity = memberRepository.findByProviderToken(providerToken);
+		Optional<MemberJpaEntity> jpaEntity = memberRepository.findByProviderId(providerId);
 
 		return jpaEntity.map(mapper::mapToMemberDomain);
 	}

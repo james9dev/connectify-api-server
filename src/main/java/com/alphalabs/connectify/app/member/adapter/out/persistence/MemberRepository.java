@@ -10,8 +10,8 @@ import java.util.Optional;
 
 interface MemberRepository extends JpaRepository<MemberJpaEntity, Long> {
 
-	@Query("select m from MemberJpaEntity m where m.providerToken = :providerToken")
-	Optional<MemberJpaEntity> findByProviderToken(@Param("providerToken") String providerToken);
+	//@Query("select m from MemberJpaEntity m where m.providerId = :providerId")
+	Optional<MemberJpaEntity> findByProviderId(@Param("providerId") Long providerId);
 
 	@Query("SELECT new com.alphalabs.connectify.app.member.adapter.out.persistence.MemberDistance(m, " +
 			"(6371 * acos(cos(radians(:lat)) * cos(radians(m.profile.latitude)) * cos(radians(m.profile.longitude) - radians(:lon)) + sin(radians(:lat)) * sin(radians(m.profile.latitude)))) AS distance) " +

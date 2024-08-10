@@ -10,6 +10,7 @@ import com.alphalabs.connectify.app.member.application.port.out.InsertMemberPort
 import com.alphalabs.connectify.app.member.domain.AuthDomain;
 import com.alphalabs.connectify.app.member.domain.KakaoDomain;
 import com.alphalabs.connectify.app.member.domain.MemberDomain;
+import com.alphalabs.connectify.common.AuthTokenDto;
 import com.alphalabs.connectify.exception.*;
 import com.alphalabs.connectify.common.architecture.UseCase;
 import jakarta.transaction.Transactional;
@@ -31,20 +32,25 @@ public class MemberRegisterService implements RegisterKakaoUseCase, AuthUseCase 
 	@Override
 	public AuthDomain authKakao(RegisterKakaoCommand command) {
 
-		Optional<MemberDomain> member = getMemberPort.getMember(command.getKakaoAccessToken());
+		KakaoDomain kakaoDomain = getKakaoUserPort.getUser(command.getKakaoAccessToken()).orElseThrow();
 
+		Optional<MemberDomain> member = getMemberPort.getMemberByProvider(kakaoDomain.getId());
+
+		AuthTokenDto.AuthType authType;
 		Long memberId;
 
 		if (member.isPresent()) {
+			authType = AuthTokenDto.AuthType.SignIn;
 			memberId = member.get().getId();
 		} else {
-			KakaoDomain kakaoDomain = getKakaoUserPort.getUser(command.getKakaoAccessToken()).orElseThrow();
+
 			kakaoDomain.setAccess_token(command.getKakaoAccessToken());
 
+			authType = AuthTokenDto.AuthType.SignUp;
 			memberId = insertMemberPort.insertKakaoUser(kakaoDomain);
 		}
 
-		return AuthDomain.withMemberId(memberId);
+		return AuthDomain.withMemberId(authType, memberId);
 	}
 
 	@Override

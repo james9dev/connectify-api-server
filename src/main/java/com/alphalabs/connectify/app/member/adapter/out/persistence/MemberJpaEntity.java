@@ -30,22 +30,31 @@ class MemberJpaEntity {
 	@ColumnDefault("false")
 	private Boolean verifiedPhoneNumber;
 
-	private String providerToken;
-
 	@Enumerated(EnumType.STRING)
 	private ProviderType providerType;
+	@Column(unique = true)
+	private Long providerId;
+	private String providerToken;
 
 	@OneToOne(mappedBy = "member")
 	private ProfileJpaEntity profile;
 
-	public MemberJpaEntity(String email, boolean verifiedEmail, String phoneNumber, boolean verifiedPhoneNumber, String providerToken, ProviderType providerType) {
+	public MemberJpaEntity(String email,
+						   boolean verifiedEmail,
+						   String phoneNumber,
+						   boolean verifiedPhoneNumber,
+						   ProviderType providerType,
+						   Long providerId,
+						   String providerToken) {
 		this.email = email;
 		this.verifiedEmail = verifiedEmail;
 
 		this.phoneNumber = phoneNumber;
 		this.verifiedPhoneNumber = verifiedPhoneNumber;
 
-		this.providerToken = providerToken;
 		this.providerType = providerType;
+		this.providerId = providerId;
+		this.providerToken = providerToken;
+
 	}
 }

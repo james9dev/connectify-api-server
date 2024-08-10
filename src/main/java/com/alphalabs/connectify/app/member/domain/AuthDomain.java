@@ -17,7 +17,7 @@ public class AuthDomain {
 	@Getter
 	AuthTokenDto authToken;
 
-	public static AuthDomain withMemberId(Long memberId) {
+	public static AuthDomain withMemberId(AuthTokenDto.AuthType authType, Long memberId) {
 
 		long accessExpirationTime = System.currentTimeMillis() + ACCESS_EXP;
 		long refreshExpirationTime = System.currentTimeMillis() + REFRESH_EXP;
@@ -26,7 +26,7 @@ public class AuthDomain {
 		String refreshToken = JwtUtil.createRefreshToken(memberId, refreshExpirationTime);
 
 
-		AuthTokenDto authTokenDto = new AuthTokenDto(accessToken, refreshToken);
+		AuthTokenDto authTokenDto = new AuthTokenDto(authType, accessToken, refreshToken);
 
 		return new AuthDomain(authTokenDto);
 	}
@@ -39,6 +39,6 @@ public class AuthDomain {
 
 		Long memberId = JwtUtil.getId(refreshToken);
 
-		return withMemberId(memberId);
+		return withMemberId(AuthTokenDto.AuthType.Refresh, memberId);
 	}
 }
