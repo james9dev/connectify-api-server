@@ -18,14 +18,13 @@ class MemberJpaEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private String email;
-
 	private String name;
 
-	private String phoneNumber;
-
+	private String email;
 	@ColumnDefault("false")
 	private Boolean verifiedEmail;
+
+	private String phoneNumber;
 
 	@ColumnDefault("false")
 	private Boolean verifiedPhoneNumber;
@@ -39,13 +38,15 @@ class MemberJpaEntity {
 	@OneToOne(mappedBy = "member")
 	private ProfileJpaEntity profile;
 
-	public MemberJpaEntity(String email,
+	public MemberJpaEntity(String name,
+						   String email,
 						   boolean verifiedEmail,
 						   String phoneNumber,
 						   boolean verifiedPhoneNumber,
 						   ProviderType providerType,
 						   Long providerId,
 						   String providerToken) {
+		this.name = name;
 		this.email = email;
 		this.verifiedEmail = verifiedEmail;
 

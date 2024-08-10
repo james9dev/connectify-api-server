@@ -35,6 +35,7 @@ class MemberPersistenceAdapter implements InsertMemberPort, GetMemberPort, Updat
 		KakaoDomain.KakaoAccount kakaoAccount = kakaoDomain.getKakao_account();
 
 		MemberJpaEntity member = new MemberJpaEntity(
+				kakaoAccount.getName(),
 				kakaoAccount.getEmail(),
 				kakaoAccount.getIs_email_verified(),
 				kakaoAccount.getPhone_number(),
