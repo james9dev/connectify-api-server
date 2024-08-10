@@ -15,5 +15,4 @@ public class ListDto<T> {
 	private final Integer size;
 	private final Integer total;
 
-
 }

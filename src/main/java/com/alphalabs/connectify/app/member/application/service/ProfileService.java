@@ -76,10 +76,7 @@ public class ProfileService implements GetProfileUseCase, UpdateProfileUseCase, 
 		return list;
 	}
 
-
 	public boolean uploadPhoto(String accessToken, MultipartFile file) {
-
-
 
 		return true;
 	}

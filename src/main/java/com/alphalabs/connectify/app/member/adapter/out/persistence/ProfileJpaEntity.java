@@ -36,9 +36,6 @@ class ProfileJpaEntity {
 	@JoinColumn(name = "member_id")
 	private MemberJpaEntity member;
 
-//	@OneToOne(mappedBy = "profile")
-//	private MemberJpaEntity member;
-
 	@OneToMany(mappedBy = "profile", fetch = FetchType.LAZY)
 	private List<PictureJpaEntity> pictures = new ArrayList<>();
 
