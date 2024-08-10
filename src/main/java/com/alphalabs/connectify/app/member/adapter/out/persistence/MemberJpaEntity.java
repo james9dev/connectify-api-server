@@ -25,10 +25,10 @@ class MemberJpaEntity {
 	private String phoneNumber;
 
 	@ColumnDefault("false")
-	private boolean verifiedEmail;
+	private Boolean verifiedEmail;
 
 	@ColumnDefault("false")
-	private boolean verifiedPhoneNumber;
+	private Boolean verifiedPhoneNumber;
 
 	private String providerToken;
 
@@ -38,16 +38,14 @@ class MemberJpaEntity {
 	@OneToOne(mappedBy = "member")
 	private ProfileJpaEntity profile;
 
-//	@OneToOne(fetch = FetchType.LAZY)
-//	@JoinColumn(name = "profile_id")
-//	private ProfileJpaEntity profile;
-
-
-	public MemberJpaEntity(String email, boolean verifiedEmail, String providerToken, ProviderType providerType) {
+	public MemberJpaEntity(String email, boolean verifiedEmail, String phoneNumber, boolean verifiedPhoneNumber, String providerToken, ProviderType providerType) {
 		this.email = email;
 		this.verifiedEmail = verifiedEmail;
+
+		this.phoneNumber = phoneNumber;
+		this.verifiedPhoneNumber = verifiedPhoneNumber;
+
 		this.providerToken = providerToken;
 		this.providerType = providerType;
 	}
-
 }

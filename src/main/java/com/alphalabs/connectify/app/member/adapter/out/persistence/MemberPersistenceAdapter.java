@@ -37,6 +37,8 @@ class MemberPersistenceAdapter implements InsertMemberPort, GetMemberPort, Updat
 		MemberJpaEntity member = new MemberJpaEntity(
 				kakaoAccount.getEmail(),
 				kakaoAccount.getIs_email_verified(),
+				kakaoAccount.getPhone_number(),
+				!kakaoAccount.getPhone_number().isEmpty(),
 				kakaoDomain.getAccess_token(),
 				ProviderType.KAKAO);
 
@@ -51,6 +53,7 @@ class MemberPersistenceAdapter implements InsertMemberPort, GetMemberPort, Updat
 			GenderType genderType = GenderType.MALE.toString().equals(gender) ? GenderType.MALE : GenderType.FEMALE;
 			profile.setGender(genderType);
 		}
+
 
 		member.setProfile(profile);
 
@@ -139,7 +142,7 @@ class MemberPersistenceAdapter implements InsertMemberPort, GetMemberPort, Updat
 			Double latitude = targetMember.get().getProfile().getLatitude();
 			Double longitude = targetMember.get().getProfile().getLongitude();
 
-			 memberRepository.findNearbyMembers(latitude, longitude, radius);
+			//memberRepository.findNearbyMembers(latitude, longitude, radius);
 
 			List<MemberDistance> results = memberRepository.findNearbyMembers(latitude, longitude, radius);
 			List<MemberDistanceDomain> nearbyMembers = new ArrayList<>();
