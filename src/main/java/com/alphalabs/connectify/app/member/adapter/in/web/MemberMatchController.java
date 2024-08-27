@@ -2,6 +2,7 @@ package com.alphalabs.connectify.app.member.adapter.in.web;
 
 import com.alphalabs.connectify.app.member.application.port.in.GetProfileUseCase;
 import com.alphalabs.connectify.app.member.domain.MemberDistanceDomain;
+import com.alphalabs.connectify.app.member.domain.MemberDomain;
 import com.alphalabs.connectify.common.ListDto;
 import com.alphalabs.connectify.common.ResultDto;
 import com.alphalabs.connectify.common.architecture.WebAdapter;
@@ -31,6 +32,20 @@ public class MemberMatchController {
 		ListDto<MemberDistanceDomain> listDto = new ListDto<>(nearbyMembers, nearbyMembers.size(), 0);
 
 		ResultDto<ListDto<MemberDistanceDomain>> result = new ResultDto<>(200, "테스트 메시지", listDto);
+
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+
+	@GetMapping(path = "/match/intro")
+	ResponseEntity<ResultDto<ListDto<MemberDomain>>> introMembers(@RequestHeader("Authorization") String authorization) {
+
+		String accessToken = authorization.split(" ")[1];
+
+		List<MemberDomain> members = getUseCase.getIntroMembers(accessToken);
+
+		ListDto<MemberDomain> listDto = new ListDto<>(members, members.size(), 0);
+
+		ResultDto<ListDto<MemberDomain>> result = new ResultDto<>(200, "테스트 메시지", listDto);
 
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}

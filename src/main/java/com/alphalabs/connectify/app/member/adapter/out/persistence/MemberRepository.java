@@ -19,4 +19,8 @@ interface MemberRepository extends JpaRepository<MemberJpaEntity, Long> {
 			"WHERE (6371 * acos(cos(radians(:lat)) * cos(radians(m.profile.latitude)) * cos(radians(m.profile.longitude) - radians(:lon)) + sin(radians(:lat)) * sin(radians(m.profile.latitude)))) < :radius " +
 			"ORDER BY distance ASC")
 	List<MemberDistance> findNearbyMembers(@Param("lat") double lat, @Param("lon") double lon, @Param("radius") double radius);
+
+	@Query("SELECT m FROM MemberJpaEntity m JOIN m.profile p WHERE p.birthyear BETWEEN :startYear AND :endYear")
+	List<MemberJpaEntity> findMembersByBirthyearRange(@Param("startYear") String startYear, @Param("endYear") String endYear);
+
 }

@@ -11,4 +11,5 @@ public interface GetProfileUseCase {
 	MemberDomain getProfileMe(String accessToken);
 
 	List<MemberDistanceDomain> getNearbyMembers(String accessToken, Long radius);
+	List<MemberDomain> getIntroMembers(String accessToken);
 }

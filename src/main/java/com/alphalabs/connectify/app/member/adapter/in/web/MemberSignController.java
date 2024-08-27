@@ -21,6 +21,20 @@ public class MemberSignController {
 	private final RegisterKakaoUseCase registerKakaoAuthUseCase;
 	private final AuthUseCase authUseCase;
 
+	@PostMapping(path = "/member/sign/test")
+	ResponseEntity<ResultDto<AuthTokenDto>> signTest(@RequestBody RequestSignUpKakaoDto request) {
+
+		String kakaoAccessToken = request.getAccessToken();
+
+		RegisterKakaoCommand command = new RegisterKakaoCommand(kakaoAccessToken);
+
+		AuthDomain authDomain = registerKakaoAuthUseCase.testAuthKakao(command);
+
+		ResultDto<AuthTokenDto> result = new ResultDto<>(201, "테스트 메시지", null);
+
+		return new ResponseEntity<>(result, HttpStatus.CREATED);
+	}
+
 	@PostMapping(path = "/member/sign/kakao")
 	ResponseEntity<ResultDto<AuthTokenDto>> authKakao(@RequestBody RequestSignUpKakaoDto request) {
 

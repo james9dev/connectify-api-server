@@ -5,5 +5,6 @@ import com.alphalabs.connectify.app.member.domain.AuthDomain;
 
 public interface RegisterKakaoUseCase {
 
+	AuthDomain testAuthKakao(RegisterKakaoCommand command);
 	AuthDomain authKakao(RegisterKakaoCommand command);
 }

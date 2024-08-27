@@ -50,12 +50,21 @@ class MemberPersistenceAdapter implements InsertMemberPort, GetMemberPort, Updat
 		profile.setMember(member);
 
 		String gender = kakaoAccount.getGender();
+		String birthyear = kakaoAccount.getBirthyear();
+		String birthday = kakaoAccount.getBirthday();
 
-		if (gender != null) {
+		if (!gender.isEmpty()) {
 			GenderType genderType = GenderType.MALE.toString().equals(gender) ? GenderType.MALE : GenderType.FEMALE;
 			profile.setGender(genderType);
 		}
 
+		if (!birthyear.isEmpty()) {
+			profile.setBirthyear(birthyear);
+		}
+
+		if (!birthday.isEmpty()) {
+			profile.setBirthday(birthday);
+		}
 
 		member.setProfile(profile);
 
@@ -137,9 +146,10 @@ class MemberPersistenceAdapter implements InsertMemberPort, GetMemberPort, Updat
 	}
 
 	@Override
-	public List<MemberDistanceDomain> findNearbyUsers(Long memberId, Long radius) {
+	public List<MemberDistanceDomain> findNearbyMembers(Long memberId, Long radius) {
 
 		Optional<MemberJpaEntity> targetMember = memberRepository.findById(memberId);
+
 		if (targetMember.isPresent()) {
 			Double latitude = targetMember.get().getProfile().getLatitude();
 			Double longitude = targetMember.get().getProfile().getLongitude();
@@ -165,6 +175,23 @@ class MemberPersistenceAdapter implements InsertMemberPort, GetMemberPort, Updat
 
 		return null;
 	}
+
+	@Override
+	public List<MemberDomain> getIntroMembers(Long memberId) {
+
+		Optional<MemberJpaEntity> targetMember = memberRepository.findById(memberId);
+		if (targetMember.isPresent()) {
+			String birthyear = targetMember.get().getProfile().getBirthyear();
+
+			String start = String.valueOf(Integer.parseInt(birthyear) - 4);
+			String end = String.valueOf(Integer.parseInt(birthyear) + 4);
+
+			return memberRepository.findMembersByBirthyearRange(start, end).stream().map(mapper::mapToMemberDomain).toList();
+		}
+
+		return null;
+	}
+
 
 	@Override
 	public ProfileDomain.ProfilePicture insertPicture(Long memberId, String filePath, Integer order) {

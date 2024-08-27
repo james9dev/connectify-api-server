@@ -16,10 +16,9 @@ import com.alphalabs.connectify.exception.NoSuchElementFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -71,15 +70,16 @@ public class ProfileService implements GetProfileUseCase, UpdateProfileUseCase, 
 	public List<MemberDistanceDomain> getNearbyMembers(String accessToken, Long radius) {
 		Long memberId = JwtUtil.getId(accessToken);
 
-		List<MemberDistanceDomain> list = getMemberPort.findNearbyUsers(memberId, radius);
-
-		return list;
+		return getMemberPort.findNearbyMembers(memberId, radius);
 	}
 
-	public boolean uploadPhoto(String accessToken, MultipartFile file) {
+	@Override
+	public List<MemberDomain> getIntroMembers(String accessToken) {
+		Long memberId = JwtUtil.getId(accessToken);
 
-		return true;
+		return getMemberPort.getIntroMembers(memberId);
 	}
+
 
 	@Override
 	public ProfileDomain.ProfilePicture uploadPicture(UploadPictureCommand uploadPictureCommand) throws IOException {

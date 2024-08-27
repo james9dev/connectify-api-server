@@ -10,5 +10,6 @@ public interface GetMemberPort {
 	Optional<MemberDomain> getMember(Long memberId);
 	Optional<MemberDomain> getMemberByProvider(Long providerId);
 
-	List<MemberDistanceDomain> findNearbyUsers(Long memberId, Long radius);
+	List<MemberDistanceDomain> findNearbyMembers(Long memberId, Long radius);
+	List<MemberDomain> getIntroMembers(Long memberId);
 }

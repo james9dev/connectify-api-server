@@ -17,6 +17,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;
+import java.util.Random;
 
 @RequiredArgsConstructor
 @UseCase
@@ -27,6 +28,33 @@ public class MemberRegisterService implements RegisterKakaoUseCase, AuthUseCase 
 	private final GetMemberPort getMemberPort;
 	private final GetKakaoUserPort getKakaoUserPort;
 
+	@Override
+	public AuthDomain testAuthKakao(RegisterKakaoCommand command) {
+
+		KakaoDomain kakaoDomain = getKakaoUserPort.getUser(command.getKakaoAccessToken()).orElseThrow();
+
+//		Optional<MemberDomain> member = getMemberPort.getMemberByProvider(kakaoDomain.getId());
+//
+		AuthTokenDto.AuthType authType = null;
+		Long memberId;
+//
+//		if (member.isPresent()) {
+//			authType = AuthTokenDto.AuthType.SignIn;
+//			memberId = member.get().getId();
+//		} else {
+
+
+		for (int i = 0; i < 10; i++){
+			kakaoDomain.setId(new Random().nextLong());
+			kakaoDomain.setAccess_token(command.getKakaoAccessToken());
+
+			authType = AuthTokenDto.AuthType.SignUp;
+			memberId = insertMemberPort.insertKakaoUser(kakaoDomain);
+		}
+//		}
+
+		return null;
+	}
 
 
 	@Override
