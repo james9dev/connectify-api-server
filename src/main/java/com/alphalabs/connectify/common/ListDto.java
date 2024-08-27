@@ -11,7 +11,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ListDto<T> {
 
-	private final List<T> datas;
+	private final List<T> values;
 	private final Integer size;
 	private final Integer total;
 
