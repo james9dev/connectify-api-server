@@ -3,14 +3,17 @@ package com.alphalabs.connectify.app.member.adapter.out.persistence;
 
 import com.alphalabs.connectify.app.member.domain.MemberDomain;
 import com.alphalabs.connectify.app.member.domain.ProfileDomain;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 @Component
 class MemberPersistenceMapper {
+
+	@Value("${file.server.domain}")
+	private String fileServerDomain;
 
 	MemberDomain mapToMemberDomain(MemberJpaEntity memberJpaEntity) {
 
@@ -23,7 +26,6 @@ class MemberPersistenceMapper {
 				memberJpaEntity.getEmail(),
 				memberJpaEntity.getName(),
 				profileDomain);
-
 	}
 
 	ProfileDomain mapToProfileDomain(ProfileJpaEntity profileJpaEntity) {
@@ -37,16 +39,18 @@ class MemberPersistenceMapper {
 				profileJpaEntity.getBirthday(),
 				profileJpaEntity.getLatitude(),
 				profileJpaEntity.getLongitude(),
-				profileJpaEntity.getPictures().stream().map(MemberPersistenceMapper::mapToProfilePicture).toList()
+				profileJpaEntity.getPictures().stream().map(this::mapToProfilePicture).toList()
 		);
 	}
 
-	static ProfileDomain.ProfilePicture mapToProfilePicture(PictureJpaEntity pictureJpaEntity) {
+	ProfileDomain.ProfilePicture mapToProfilePicture(PictureJpaEntity pictureJpaEntity) {
+
+		String encodedUrl = URLEncoder.encode((fileServerDomain + pictureJpaEntity.getImageUrl()), StandardCharsets.UTF_8);
+
 		return new ProfileDomain.ProfilePicture(
 				pictureJpaEntity.getId(),
-				pictureJpaEntity.getImageUrl(),
+				encodedUrl,
 				pictureJpaEntity.getPictureOrder(),
 				pictureJpaEntity.getCreatedAt());
 	}
-
 }
