@@ -25,6 +25,7 @@ class MemberPersistenceMapper {
 				memberJpaEntity.getId(),
 				memberJpaEntity.getEmail(),
 				memberJpaEntity.getName(),
+				memberJpaEntity.getCreatedAt(),
 				profileDomain);
 	}
 
@@ -37,8 +38,14 @@ class MemberPersistenceMapper {
 				profileJpaEntity.getHeight(),
 				profileJpaEntity.getBirthyear(),
 				profileJpaEntity.getBirthday(),
+				profileJpaEntity.getJob(),
+				profileJpaEntity.getCompany(),
+				profileJpaEntity.getEducationInstitution(),
+				profileJpaEntity.getEducationInstitution(),
 				profileJpaEntity.getLatitude(),
 				profileJpaEntity.getLongitude(),
+				profileJpaEntity.getLocation(),
+				profileJpaEntity.getBio(),
 				profileJpaEntity.getPictures().stream().map(this::mapToProfilePicture).toList()
 		);
 	}

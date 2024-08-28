@@ -26,11 +26,19 @@ class ProfileJpaEntity {
 
 	@Enumerated(EnumType.STRING)
 	private GenderType gender;
-
 	private Integer height;
+
+	private String job;
+	private String company;
+	private String educationInstitution;
+	private String educationGraduation;
 
 	private Double latitude;
 	private Double longitude;
+	private String location;
+
+	@Column(length = 1000)
+	private String bio;
 
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "member_id")
