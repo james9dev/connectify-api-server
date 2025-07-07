@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'com.alphalabs'
-version = '0.0.1-SNAPSHOT'
+version = 'SNAPSHOT'
 
 java {
 	toolchain {
