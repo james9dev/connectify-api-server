@@ -37,7 +37,7 @@ public class ProfileService implements GetProfileUseCase, UpdateProfileUseCase, 
 	@Override
 	public MemberDomain getProfile(Long memberId) throws NoSuchElementFoundException {
 		return getMemberPort.getMember(memberId).orElseThrow(() ->
-				new NoSuchElementFoundException("Member not found")
+				new NoSuchElementFoundException("The requested member does not exist.")
 		);
 	}
 
